@@ -24,6 +24,10 @@ class Paciente {
         throw new Error("Não é possível calcular IMC, pois peso e/ou altura é inválido");
     }
 
+    ehNomeValido() {
+        return this.nome.trim().length > 0;
+    }
+
     ehPesoValido() {
         return this.#ehNumeroValido(this.peso, Paciente.#LIMITE_PESO);
     }
@@ -38,6 +42,35 @@ class Paciente {
 
     #ehNumeroValido(numero, limiteSup) {
         return !isNaN(numero) && numero > 0 && numero < limiteSup;
+    }
+
+}
+
+class PacienteDAO {
+
+    static #BASE = new Array();
+    listenersSalvar = new Array();
+
+    addSalvarListener(listener) {
+        this.listenersSalvar.push(listener);
+    }
+
+    salvar(paciente) {
+        PacienteDAO.#BASE.push(paciente);
+
+        this.listenersSalvar.forEach(l => {
+            l(paciente);
+        });
+    }
+
+    obterTodos() {
+        let copia = new Array(PacienteDAO.#BASE.length);
+
+        PacienteDAO.#BASE.forEach(p => {
+            copia.push(p);
+        });
+
+        return copia;
     }
 
 }
