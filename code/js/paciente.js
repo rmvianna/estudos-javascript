@@ -49,13 +49,13 @@ class Paciente {
 class PacienteDAO {
 
     static #BASE = new Array();
-    listenersSalvar = new Array();
+    static listenersSalvar = new Array();
 
-    addSalvarListener(listener) {
+    static addSalvarListener(listener) {
         this.listenersSalvar.push(listener);
     }
 
-    salvar(paciente) {
+    static salvar(paciente) {
         PacienteDAO.#BASE.push(paciente);
 
         this.listenersSalvar.forEach(l => {
@@ -63,7 +63,7 @@ class PacienteDAO {
         });
     }
 
-    obterTodos() {
+    static obterTodos() {
         let copia = new Array(PacienteDAO.#BASE.length);
 
         PacienteDAO.#BASE.forEach(p => {

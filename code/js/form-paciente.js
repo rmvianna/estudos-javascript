@@ -1,4 +1,11 @@
-function salvarPaciente(pacienteDAO) {
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#adicionar-paciente").addEventListener("click", (event) => {
+        event.preventDefault();
+        salvarPaciente();
+    });
+});
+
+function salvarPaciente() {
     let formPaciente = document.querySelector("#form-adiciona");
 
     let paciente = new Paciente(
@@ -8,5 +15,7 @@ function salvarPaciente(pacienteDAO) {
         formPaciente.gordura.value
     );
 
-    pacienteDAO.salvar(paciente);
+    PacienteDAO.salvar(paciente);
+
+    formPaciente.reset();
 }

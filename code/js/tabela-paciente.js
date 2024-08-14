@@ -1,11 +1,31 @@
-function atualizarTabela(pacientes) {
+document.addEventListener("DOMContentLoaded", (event) => {
+    carregarPacientes();
+    atualizarTabela();
+
+    PacienteDAO.addSalvarListener((paciente) => {
+        adicionarPacienteTabela(paciente);
+    });
+});
+
+function carregarPacientes() {
+    document.querySelectorAll("#tabela-pacientes .paciente").forEach((linha) => {
+        PacienteDAO.salvar(new Paciente(
+            linha.querySelector(".info-nome").textContent,
+            linha.querySelector(".info-peso").textContent,
+            linha.querySelector(".info-altura").textContent,
+            linha.querySelector(".info-gordura").textContent
+        ));
+    });
+}
+
+function atualizarTabela() {
     let tabelaPacientes = document.querySelector("#tabela-pacientes");
 
     while (tabelaPacientes.firstChild) {
         tabelaPacientes.removeChild(tabelaPacientes.lastChild);
     }
 
-    pacientes.forEach(paciente => {
+    PacienteDAO.obterTodos().forEach(paciente => {
         adicionarPacienteTabela(paciente);
     });
 }
@@ -14,37 +34,25 @@ function adicionarPacienteTabela(paciente) {
     let tr = document.createElement("tr");
     tr.classList.add("paciente");
 
-    let tdNome = document.createElement("td");
-    tdNome.classList.add("info-nome");
-    tdNome.textContent = paciente.nome;
-    tr.appendChild(tdNome);
-
-    let tdPeso = document.createElement("td");
-    tdPeso.classList.add("info-peso");
-    tdPeso.textContent = paciente.peso;
-    tr.appendChild(tdPeso);
-
-    let tdAltura = document.createElement("td");
-    tdAltura.classList.add("info-altura");
-    tdAltura.textContent = paciente.altura;
-    tr.appendChild(tdAltura);
-
-    let tdGordura = document.createElement("td");
-    tdGordura.classList.add("info-gordura");
-    tdGordura.textContent = paciente.gordura;
-    tr.appendChild(tdGordura);
-
-    let tdImc = document.createElement("td");
-    tdImc.classList.add("info-imc");
+    tr.appendChild(gerarColunaPaciente(paciente.nome, "info-nome"));
+    tr.appendChild(gerarColunaPaciente(paciente.peso, "info-peso"));
+    tr.appendChild(gerarColunaPaciente(paciente.altura, "info-altura"));
+    tr.appendChild(gerarColunaPaciente(paciente.gordura, "info-gordura"));
 
     try {
-        tdImc.textContent = paciente.imc;
+        tr.appendChild(gerarColunaPaciente(paciente.imc, "info-imc"));
     } catch (e) {
-        tdImc.textContent = e.message;
+        tr.appendChild(gerarColunaPaciente(e.message, "info-nome"));
         tr.classList.add("paciente-invalido");
     }
 
-    tr.appendChild(tdImc);
-
     document.querySelector("#tabela-pacientes").appendChild(tr);
+}
+
+function gerarColunaPaciente(info, tipoInfo) {
+    let coluna = document.createElement("td");
+    coluna.classList.add(tipoInfo);
+    coluna.textContent = info;
+
+    return coluna;
 }
