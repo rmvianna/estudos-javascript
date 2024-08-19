@@ -24,6 +24,13 @@ class Paciente {
         throw new Error("Não é possível calcular IMC, pois peso e/ou altura é inválido");
     }
 
+    get id() {
+        return this.nome.split("").reduce(function(a, b) {
+            a = ((a << 5) - a) + b.charCodeAt(0);
+            return a & a;
+        }, 0);
+    }
+
     ehNomeValido() {
         return this.nome.trim().length > 0;
     }
@@ -48,7 +55,7 @@ class Paciente {
 
 class PacienteDAO {
 
-    static #BASE = new Array();
+    static #BASE = new Map();
     static listenersSalvar = new Array();
 
     static addSalvarListener(listener) {
@@ -56,18 +63,22 @@ class PacienteDAO {
     }
 
     static salvar(paciente) {
-        PacienteDAO.#BASE.push(paciente);
+        PacienteDAO.#BASE.set(paciente.id, paciente);
 
         this.listenersSalvar.forEach(l => {
             l(paciente);
         });
     }
 
-    static obterTodos() {
-        let copia = new Array(PacienteDAO.#BASE.length);
+    static remover(idPaciente) {
+        PacienteDAO.#BASE.delete(idPaciente);
+    }
 
-        PacienteDAO.#BASE.forEach(p => {
-            copia.push(p);
+    static obterTodos() {
+        let copia = new Array(PacienteDAO.#BASE.size);
+
+        PacienteDAO.#BASE.forEach(v => {
+            copia.push(v);
         });
 
         return copia;

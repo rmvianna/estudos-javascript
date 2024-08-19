@@ -3,7 +3,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
     atualizarTabela();
 
     PacienteDAO.addSalvarListener((paciente) => {
-        adicionarPacienteTabela(paciente);
+        let linha = document.querySelector("#p" + paciente.id);
+        if (linha === null) {
+            adicionarPacienteTabela(paciente);
+        } else {
+            atualizarPacienteTabela(paciente);
+        }
+    });
+
+    document.querySelector("#tabela-pacientes").addEventListener("dblclick", function(event) {
+        let linha = event.target.parentNode;
+        linha.classList.add("fade-out");
+
+        window.setTimeout(function() {
+            linha.remove();
+            PacienteDAO.remover(linha.id.substring(1));
+        }, 500);
     });
 });
 
@@ -33,7 +48,24 @@ function atualizarTabela() {
 function adicionarPacienteTabela(paciente) {
     let tr = document.createElement("tr");
     tr.classList.add("paciente");
+    tr.id = "p" + paciente.id;
 
+    adicionarDadosPacienteTabela(tr, paciente);
+
+    document.querySelector("#tabela-pacientes").appendChild(tr);
+}
+
+function atualizarPacienteTabela(paciente) {
+    let tr = document.querySelector("#p" + paciente.id);
+
+    while (tr.firstChild) {
+        tr.removeChild(tr.lastChild);
+    }    
+
+    adicionarDadosPacienteTabela(tr, paciente);
+}
+
+function adicionarDadosPacienteTabela(tr, paciente) {
     tr.appendChild(gerarColunaPaciente(paciente.nome, "info-nome"));
     tr.appendChild(gerarColunaPaciente(paciente.peso, "info-peso"));
     tr.appendChild(gerarColunaPaciente(paciente.altura, "info-altura"));
@@ -45,8 +77,6 @@ function adicionarPacienteTabela(paciente) {
         tr.appendChild(gerarColunaPaciente(e.message, "info-nome"));
         tr.classList.add("paciente-invalido");
     }
-
-    document.querySelector("#tabela-pacientes").appendChild(tr);
 }
 
 function gerarColunaPaciente(info, tipoInfo) {
