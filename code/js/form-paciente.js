@@ -18,6 +18,7 @@ function salvarPaciente() {
     if (validarPaciente(paciente)) {
         PacienteDAO.salvar(paciente);
         formPaciente.reset();
+        formPaciente.nome.disabled = false;
     }
 }
 
@@ -88,4 +89,17 @@ function limparErros() {
     while (listaErros.firstChild) {
         listaErros.removeChild(listaErros.lastChild);
     }
+}
+
+function carregarPacienteFormulario(paciente) {
+    let formPaciente = document.querySelector("#form-adiciona");
+
+    formPaciente.nome.value = paciente.nome;
+    formPaciente.nome.disabled = true;
+
+    formPaciente.peso.value = paciente.peso;
+    formPaciente.altura.value = paciente.altura;
+    formPaciente.gordura.value = paciente.gordura;
+
+    formPaciente.peso.focus();
 }

@@ -28,7 +28,7 @@ class Paciente {
         return this.nome.split("").reduce(function(a, b) {
             a = ((a << 5) - a) + b.charCodeAt(0);
             return a & a;
-        }, 0);
+        }, 0).toString();
     }
 
     ehNomeValido() {
@@ -72,6 +72,10 @@ class PacienteDAO {
 
     static remover(idPaciente) {
         PacienteDAO.#BASE.delete(idPaciente);
+    }
+
+    static obterPorId(idPaciente) {
+        return PacienteDAO.#BASE.get(idPaciente);
     }
 
     static obterTodos() {

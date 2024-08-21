@@ -20,6 +20,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
             PacienteDAO.remover(linha.id.substring(1));
         }, 500);
     });
+
+    document.querySelector("#tabela-pacientes").addEventListener("click", function(event) {
+        let linha = event.target.parentNode;
+        let pacienteSelecionado = PacienteDAO.obterPorId(linha.id.substring(1));
+        console.log(linha.id.substring(1));
+        carregarPacienteFormulario(pacienteSelecionado);
+    });
 });
 
 function carregarPacientes() {
