@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     carregarPacientes();
-    atualizarTabela();
+    atualizarTabela(PacienteDAO.obterTodos());
 
     PacienteDAO.addSalvarListener((paciente) => {
         let linha = document.querySelector("#p" + paciente.id);
@@ -27,6 +27,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         console.log(linha.id.substring(1));
         carregarPacienteFormulario(pacienteSelecionado);
     });
+
+    document.querySelector("#filtro-nome").addEventListener("input", function() {
+        let nomePaciente = this.value;
+        atualizarTabela(PacienteDAO.obterTodosLikeNome(nomePaciente));
+    });
 });
 
 function carregarPacientes() {
@@ -40,14 +45,14 @@ function carregarPacientes() {
     });
 }
 
-function atualizarTabela() {
+function atualizarTabela(pacientes) {
     let tabelaPacientes = document.querySelector("#tabela-pacientes");
 
     while (tabelaPacientes.firstChild) {
         tabelaPacientes.removeChild(tabelaPacientes.lastChild);
     }
 
-    PacienteDAO.obterTodos().forEach(paciente => {
+    pacientes.forEach(paciente => {
         adicionarPacienteTabela(paciente);
     });
 }
