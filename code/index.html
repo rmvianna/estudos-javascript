@@ -10,6 +10,7 @@
 	<script src="js/paciente.js"></script>
 	<script src="js/tabela-paciente.js"></script>
 	<script src="js/form-paciente.js"></script>
+	<script src="js/busca-paciente.js"></script>
 </head>
 
 <body>
@@ -77,13 +78,14 @@
 					</tr>
 				</tbody>
 			</table>
-
+			<span id="erro-busca-paciente" class="oculto lista-erros"></span>
+			<button id="buscar-paciente" class="botao">Buscar Pacientes</button>
 		</section>
 	</main>
 
 	<section class="container">
 		<h2 id="titulo-form">Adicionar novo paciente</h2>
-		<ul id="mensagens-erro"></ul>
+		<ul id="mensagens-erro" class="lista-erros"></ul>
 		<form id="form-adiciona">
 			<div class="grupo">
 				<label for="nome">Nome:</label>
