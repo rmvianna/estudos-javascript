@@ -88,16 +88,4 @@ class PacienteDAO {
         return copia;
     }
 
-    static obterTodosLikeNome(buscaNome) {
-        let copia = [];
-
-        PacienteDAO.#BASE.forEach(v => {
-            if (v.nome.toUpperCase().indexOf(buscaNome.toUpperCase()) > -1) {
-                copia.push(v);
-            }
-        });
-
-        return copia;
-    }
-
 }

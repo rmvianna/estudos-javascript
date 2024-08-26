@@ -29,8 +29,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
 
     document.querySelector("#filtro-nome").addEventListener("input", function() {
-        let nomePaciente = this.value;
-        atualizarTabela(PacienteDAO.obterTodosLikeNome(nomePaciente));
+        let filtroPaciente = this.value;
+        filtrarTabela("info-nome", function(nomePaciente) {
+            return nomePaciente.indexOf(filtroPaciente.toUpperCase()) > -1;
+        });
     });
 });
 
@@ -97,4 +99,16 @@ function gerarColunaPaciente(info, tipoInfo) {
     coluna.textContent = info;
 
     return coluna;
+}
+
+function filtrarTabela(celula, filtro) {
+    document.querySelectorAll(".paciente").forEach(linha => {
+        let conteudoCelula = linha.getElementsByClassName(celula)[0].textContent.toUpperCase();
+
+        if (filtro(conteudoCelula)) {
+            linha.classList.remove("oculto");
+        } else {
+            linha.classList.add("oculto");
+        }
+    });
 }
